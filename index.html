@@ -1376,7 +1376,7 @@ Your pain records stay on this device during normal use. Connect your own Google
 
 <div class="actions" style="margin-top:10px">
 <button class="tool" id="driveConnectBtn">Connect Google Drive</button>
-<button class="tool" id="driveDisconnectBtn" hidden>Disconnect</button>
+<button class="tool" id="driveDisconnectBtn" disabled>Disconnect</button>
 <button class="tool" id="driveBackupBtn" disabled="">Back up now</button>
 <button class="tool" id="driveRestoreBtn" disabled="">Restore from Drive</button>
 </div>
@@ -5116,8 +5116,8 @@ restore.disabled = !connected || busy;
 connect.disabled = busy;
 const disconnect = $('driveDisconnectBtn');
 if(disconnect){
-if(!busy) disconnect.hidden = !connected;
-disconnect.disabled = busy || !!(window.AndroidDrive && typeof window.AndroidDrive.connect === 'function' && typeof window.AndroidDrive.disconnect !== 'function');
+disconnect.hidden = false;
+disconnect.disabled = !connected || busy || !!(window.AndroidDrive && typeof window.AndroidDrive.connect === 'function' && typeof window.AndroidDrive.disconnect !== 'function');
 }
 
 if(connected){
@@ -5335,6 +5335,9 @@ $('chartShareBtn').onclick=async()=>{
 const SCOPE='https://www.googleapis.com/auth/drive.appdata';
 const NAME='pain-gauge-backup.json';
 let token='',expires=0,client=null,expiryTimer;
+const SESSION='painGaugeDriveSession';
+function clearSession(){token='';expires=0;clearTimeout(expiryTimer);try{sessionStorage.removeItem(SESSION);}catch{}}
+function armExpiry(){clearTimeout(expiryTimer);expiryTimer=setTimeout(()=>{clearSession();setDriveUi('disconnected','Your Google Drive session expired. Connect again.');},Math.max(0,expires-Date.now()));}
 const android={connect:$('driveConnectBtn').onclick,backup:$('driveBackupBtn').onclick,restore:$('driveRestoreBtn').onclick};
 const hasBridge=method=>window.AndroidDrive&&typeof window.AndroidDrive[method]==='function';
 const fail=message=>setDriveUi(token&&Date.now()<expires?'connected':'error',message);
@@ -5358,19 +5361,26 @@ async function prepare(){
   }
   client=google.accounts.oauth2.initTokenClient({client_id:config.googleClientId,scope:SCOPE,include_granted_scopes:false,
    callback:response=>{
-    if(response.error||!response.access_token){token='';fail('Google Drive permission was not granted. Please try connecting again.');return;}
-    if(!google.accounts.oauth2.hasGrantedAllScopes(response,SCOPE)){token='';fail('Google Drive permission was not granted. Please try connecting again.');return;}
+    if(response.error||!response.access_token){clearSession();fail('Google Drive permission was not granted. Please try connecting again.');return;}
+    if(!google.accounts.oauth2.hasGrantedAllScopes(response,SCOPE)){clearSession();fail('Google Drive permission was not granted. Please try connecting again.');return;}
     token=response.access_token;expires=Date.now()+Math.max(0,Number(response.expires_in||3600)-60)*1000;
-    clearTimeout(expiryTimer);expiryTimer=setTimeout(()=>{token='';setDriveUi('disconnected','Your Google Drive session expired. Connect again.');},Math.max(0,expires-Date.now()));
+    try{sessionStorage.setItem(SESSION,JSON.stringify({token,expires,clientId:config.googleClientId}));}catch{}
+    armExpiry();
     setDriveUi('connected','Connected. Backups are saved only when you choose Back up now.');
-   },error_callback:()=>{token='';fail('Google sign-in was closed or blocked. Open this page in Chrome or another browser and allow the sign-in popup.');}
+   },error_callback:()=>{clearSession();fail('Google sign-in was closed or blocked. Open this page in Chrome or another browser and allow the sign-in popup.');}
   });
+  try{
+   const saved=JSON.parse(sessionStorage.getItem(SESSION)||'null');
+   if(saved&&saved.clientId===config.googleClientId&&typeof saved.token==='string'&&saved.token&&Number.isFinite(saved.expires)&&saved.expires>Date.now()){
+    token=saved.token;expires=saved.expires;armExpiry();setDriveUi('connected','Connected. Backups are saved only when you choose Back up now.');
+   }else{clearSession();}
+  }catch{clearSession();}
  }catch(error){fail(error.message||setupMessage);}
 }
 async function request(url,options={}){
- if(!token||Date.now()>=expires){token='';throw new Error('Your Google Drive session expired. Connect again.');}
+ if(!token||Date.now()>=expires){clearSession();throw new Error('Your Google Drive session expired. Connect again.');}
  const response=await fetch(url,{...options,headers:{...options.headers,Authorization:'Bearer '+token},signal:AbortSignal.timeout(30000)});
- if(response.status===401){token='';throw new Error('Your Google Drive session expired. Connect again.');}
+ if(response.status===401){clearSession();throw new Error('Your Google Drive session expired. Connect again.');}
  if(!response.ok){
   if(response.status===403)throw new Error('Google Drive access was denied. Check the app setup and granted permission.');
   throw new Error('Google Drive request failed. Please try again.');
@@ -5396,7 +5406,7 @@ $('driveDisconnectBtn').onclick=()=>{
   if(hasBridge('disconnect')){window.AndroidDrive.disconnect();setDriveUi('disconnected','Disconnected. Your saved backup and device records are unchanged.');}
   return;
  }
- token='';expires=0;clearTimeout(expiryTimer);
+ clearSession();
  setDriveUi('disconnected','Disconnected. Your saved backup and device records are unchanged.');
 };
 $('driveBackupBtn').onclick=async()=>{
