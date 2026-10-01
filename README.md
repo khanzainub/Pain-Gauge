@@ -45,3 +45,9 @@ Preserve anatomical point IDs and stored record keys when improving the app. Tes
 ## License
 
 Copyright © 2026 Zainab Khan. MIT License; see [LICENSE](LICENSE).
+
+## Data continuity when updating
+
+Keep the published origin, localStorage keys, anatomical IDs, record schema and OAuth client/project unchanged for routine updates. Never clear patient storage during startup or deployment. If a schema change is necessary, make a backward-compatible migration and keep a recoverable copy before writing. Changing the Google Cloud project can change access to the app-data backups; do not do this as a routine upgrade. Before release, verify existing sample records survive a reload and update, and that existing backups still restore.
+
+Google permission and an active browser token are different. Tokens are temporary and intentionally held only in page memory. Reopening the page or token expiry can require connecting again; it does not erase Drive backups. Cloud backups occur only when the user chooses Back up now. Reconnect and restore an existing backup before backing up from a new or empty device, because a backup updates the saved cloud file. Keep CSV exports as independent copies. Data retention is not guaranteed; users are responsible for keeping copies, and the maintainer does not accept responsibility for data loss.
