@@ -5388,6 +5388,10 @@ $('driveConnectBtn').onclick=()=>{
  try{client.requestAccessToken({prompt:'select_account'});}catch{fail('Google sign-in was closed or blocked. Open this page in Chrome or another browser and allow the sign-in popup.');}
 };
 $('driveDisconnectBtn').onclick=()=>{
+ const warning=localStorage.getItem('painGaugeLanguage')==='hi'
+ ? 'डिस्कनेक्ट करने से पहले अपने नए दर्द के रिकॉर्ड Google Drive पर बैकअप कर लें। पहले से सेव किया हुआ बैकअप बना रहेगा। क्या आप डिस्कनेक्ट करना चाहते हैं?'
+ : 'Before disconnecting, back up your latest pain records to Google Drive. Your existing backup will remain saved. Do you want to disconnect?';
+ if(!confirm(warning))return;
  if(hasBridge('connect')){
   if(hasBridge('disconnect')){window.AndroidDrive.disconnect();setDriveUi('disconnected','Disconnected. Your saved backup and device records are unchanged.');}
   return;
