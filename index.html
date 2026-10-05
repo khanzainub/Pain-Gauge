@@ -8,7 +8,7 @@
   --bg:#f4f7fb;
   --card:#fff;
   --ink:#172033;
-  --muted:#68758a;
+  --muted:#4b5a6e;
   --line:#d8e0ea;
   --blue:#285b9a;
   --blue2:#eaf2fb;
@@ -592,6 +592,10 @@ footer{
 #chartEntryDialog p{overflow-wrap:anywhere;margin:8px 0}
 #chartEntryDialog button{min-height:44px}
 
+
+/* Improve secondary-text readability without enlarging desktop layout. */
+.small,.meta,.figure-note,.skeleton-help,footer{font-weight:500}
+@media(max-width:600px){.small,.meta,.figure-note,.skeleton-help,footer{font-size:12px}}
 </style>
 <style>.wrap{max-width:1180px}.wrap>section,.wrap>details{margin-bottom:20px}.profile-card summary{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:19px;font-weight:750;cursor:pointer}.profile-card[open] summary{margin-bottom:16px}.profile-card .section{margin:0;padding:0;border:0}.profile-card .primary{width:auto;padding:10px 18px}.layout{grid-template-columns:minmax(0,1fr) 300px;margin-bottom:20px}.pain-entry{position:sticky;top:115px}.step-link{text-decoration:none;color:var(--blue);display:inline-block}.body-grid{gap:12px}.body-svg{max-height:none}.export-groups{display:grid;grid-template-columns:1fr 1fr;gap:24px}.export-groups h3{font-size:15px;margin:8px 0}.check-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.small{font-size:12px}input,select,textarea{min-height:42px}.section-head{gap:12px}section,details{scroll-margin-top:120px}.about a{color:var(--blue)}#profileSaved{align-self:center}@media(max-width:850px){.layout{grid-template-columns:1fr}.pain-entry{position:static}.check-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.export-groups{grid-template-columns:1fr}}@media(max-width:500px){.body-grid{grid-template-columns:1fr 1fr}.figure{padding:4px}.figure-note{min-height:34px}.skeleton-controls{gap:4px}.skeleton-controls select{width:100%;min-width:0}.two{grid-template-columns:1fr}.check-grid{grid-template-columns:1fr}.head{gap:8px}.brand p{font-size:11px}.actions{gap:6px}}</style><style>.routine-options{margin:14px 0;border:1px solid var(--line);border-radius:10px;padding:12px}.routine-options>summary{cursor:pointer;font-weight:650}.routine-options[open]>summary{margin-bottom:12px}</style><style>
 /* Responsive desktop and app WebView sizing */
