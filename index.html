@@ -4310,7 +4310,7 @@ function renderChart(){
   const limit=Math.max(18,Math.floor((Math.min(W,viewport)-90)/7.5));
   for(const word of words){let i=lines.length-1;if(lines[i]&&(lines[i]+' '+word).length>limit)lines.push(word);else lines[i]+=(lines[i]?' ':'')+word;}return lines;
  });
- const TOP=20+legendLines.reduce((n,l)=>n+l.length*20+8,0),LEFT=56,RIGHT=32,BOTTOM=66,H=TOP+240+BOTTOM;
+ const TOP=48+legendLines.reduce((n,l)=>n+l.length*20+8,0),LEFT=56,RIGHT=32,BOTTOM=118,H=TOP+240+BOTTOM;
  root.setAttribute('viewBox',`0 0 ${W} ${H}`);root.style.width=W+'px';root.style.height=H+'px';
  const pw=W-LEFT-RIGHT,ph=240,x=i=>LEFT+(dates.length===1?pw/2:i/(dates.length-1)*pw),y=v=>TOP+ph-v/10*ph;
  const add=(tag,attrs,text)=>{const node=svg(tag,attrs,text);root.appendChild(node);return node;};
@@ -4318,8 +4318,11 @@ function renderChart(){
  add('rect',{width:W,height:H,rx:12,fill:'#ffffff'});
  let ly=22;
  selectedLocations.forEach((id,i)=>{add('line',{x1:LEFT,y1:ly-4,x2:LEFT+20,y2:ly-4,stroke:seriesColours[i%seriesColours.length],'stroke-width':3});for(const line of legendLines[i]){text({x:LEFT+28,y:ly},line);ly+=20;}ly+=8;});
- for(let v=0;v<=10;v+=2){add('line',{x1:LEFT,y1:y(v),x2:W-RIGHT,y2:y(v),stroke:'#e2e8f0','stroke-dasharray':v?'3 5':'none'});text({x:LEFT-12,y:y(v)+4,'text-anchor':'end'},v);}
+ for(let v=0;v<=10;v+=2){add('line',{x1:LEFT,y1:y(v),x2:W-RIGHT,y2:y(v),stroke:'#e1e5ea','stroke-width':1});text({x:LEFT-12,y:y(v)+4,'text-anchor':'end'},v);}
  add('line',{x1:LEFT,y1:TOP,x2:LEFT,y2:y(0),stroke:'#94a3b8'});
+ const ticks=Math.min(dates.length,Math.max(2,Math.floor(pw/38)+1)),used=new Set();
+ const dateTicks=[];
+ for(let t=0;t<ticks;t++){const i=ticks===1?0:Math.round(t/(ticks-1)*(dates.length-1));if(used.has(i))continue;used.add(i);dateTicks.push(i);add('line',{x1:x(i),y1:TOP,x2:x(i),y2:y(0),stroke:'#e1e5ea','stroke-width':1,'pointer-events':'none'});}
  const groups=new Map();for(const e of visible){const key=e.date; if(!groups.has(key))groups.set(key,[]);groups.get(key).push(e);}
  selectedLocations.forEach((id,si)=>{
   const daily=new Map();for(const e of visible.filter(e=>e.anatomicalId===id)){daily.set(e.date,Math.max(daily.get(e.date)??-Infinity,Number(e.painScore)));}
@@ -4340,9 +4343,8 @@ function renderChart(){
    }
   }
  });
- const ticks=Math.min(dates.length,Math.max(2,Math.floor(pw/140)+1)),used=new Set();
- for(let t=0;t<ticks;t++){const i=ticks===1?0:Math.round(t/(ticks-1)*(dates.length-1));if(used.has(i))continue;used.add(i);text({x:x(i),y:H-38,'text-anchor':i===0&&dates.length>1?'start':i===dates.length-1&&dates.length>1?'end':'middle'},dates[i]);}
- text({x:18,y:TOP+ph/2,transform:`rotate(-90 18 ${TOP+ph/2})`,'text-anchor':'middle'},'Pain score');
+ for(const i of dateTicks){const tx=x(i)+4,ty=y(0)+14;text({x:tx,y:ty,transform:`rotate(-90 ${tx} ${ty})`,'text-anchor':'end'},dates[i]);}
+ text({x:LEFT-12,y:TOP-14,'text-anchor':'start'},'Pain score');
  text({x:LEFT+pw/2,y:H-12,'text-anchor':'middle'},'Date');
  $('chartMsg').textContent=`${dates.length} day(s) plotted. Missing dates are displayed as 0.`;
 }
