@@ -4330,11 +4330,11 @@ function renderChart(){
  add('rect',{width:W,height:H,rx:12,fill:'#ffffff'});
  let ly=22;
  selectedLocations.forEach((id,i)=>{add('line',{x1:LEFT,y1:ly-4,x2:LEFT+20,y2:ly-4,stroke:seriesColours[i%seriesColours.length],'stroke-width':3});for(const line of legendLines[i]){text({x:LEFT+28,y:ly},line);ly+=20;}ly+=8;});
- for(let v=0;v<=10;v+=2){add('line',{x1:LEFT,y1:y(v),x2:W-RIGHT,y2:y(v),stroke:'#e1e5ea','stroke-width':1});text({x:LEFT-12,y:y(v)+4,'text-anchor':'end'},v);}
+ for(let v=0;v<=10;v+=2){add('line',{x1:LEFT,y1:y(v),x2:W-RIGHT,y2:y(v),stroke:'#bdc6d1','stroke-width':1});text({x:LEFT-12,y:y(v)+4,'text-anchor':'end'},v);}
  add('line',{x1:LEFT,y1:TOP,x2:LEFT,y2:y(0),stroke:'#94a3b8'});
  const ticks=Math.min(dates.length,Math.max(2,Math.floor(pw/38)+1)),used=new Set();
  const dateTicks=[];
- for(let t=0;t<ticks;t++){const i=ticks===1?0:Math.round(t/(ticks-1)*(dates.length-1));if(used.has(i))continue;used.add(i);dateTicks.push(i);add('line',{x1:x(i),y1:TOP,x2:x(i),y2:y(0),stroke:'#e1e5ea','stroke-width':1,'pointer-events':'none'});}
+ for(let t=0;t<ticks;t++){const i=ticks===1?0:Math.round(t/(ticks-1)*(dates.length-1));if(used.has(i))continue;used.add(i);dateTicks.push(i);add('line',{x1:x(i),y1:TOP,x2:x(i),y2:y(0),stroke:'#bdc6d1','stroke-width':1,'pointer-events':'none'});}
  const groups=new Map();for(const e of visible){const key=e.date; if(!groups.has(key))groups.set(key,[]);groups.get(key).push(e);}
  selectedLocations.forEach((id,si)=>{
   const daily=new Map();for(const e of visible.filter(e=>e.anatomicalId===id)){daily.set(e.date,Math.max(daily.get(e.date)??-Infinity,Number(e.painScore)));}
