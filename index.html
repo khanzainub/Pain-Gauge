@@ -4013,6 +4013,15 @@ return dates;
 }
 
 
+const CHART_VIEW_KEY='painGaugeChartViewV1';
+let lastChartView=null;
+try{
+ const saved=JSON.parse(localStorage.getItem(CHART_VIEW_KEY)||'null');
+ if(saved&&Array.isArray(saved.locations)&&saved.locations.length>0&&saved.locations.length<=4&&saved.locations.every(id=>typeof id==='string')&&/^\d{4}-\d{2}-\d{2}$/.test(saved.start)&&/^\d{4}-\d{2}-\d{2}$/.test(saved.end)&&saved.start<=saved.end){
+  lastChartView=saved;
+ }
+}catch{}
+
 function buildChartLocations(){
 
 const container =
@@ -4021,6 +4030,7 @@ $('chartLocations');
 
 const previous =
 new Set(
+!container.querySelector('input')&&lastChartView ? lastChartView.locations :
 [
 ...container.querySelectorAll(
 'input:checked'
@@ -4186,6 +4196,11 @@ alert(
 
 function initChartDates(){
 
+if(lastChartView){
+ if(!$('chartStart').value)$('chartStart').value=lastChartView.start;
+ if(!$('chartEnd').value)$('chartEnd').value=lastChartView.end;
+}
+
 const allEntries =
 entries();
 
@@ -4225,8 +4240,6 @@ dates.at(
 
 if(
 !$('chartStart').value
-||
-$('chartStart').value > minimum
 ){
 
 $('chartStart').value =
@@ -4237,8 +4250,6 @@ minimum;
 
 if(
 !$('chartEnd').value
-||
-$('chartEnd').value < maximum
 ){
 
 $('chartEnd').value =
@@ -4301,6 +4312,8 @@ function renderChart(){
  if(!selectedLocations.length){$('chartMsg').textContent='Select at least one location.';return;}
  if(!start||!end||start>end){$('chartMsg').textContent='Choose a valid date range.';return;}
  const dates=dateRange(start,end);if(!dates.length)return;
+ lastChartView={locations:selectedLocations,start,end};
+ try{localStorage.setItem(CHART_VIEW_KEY,JSON.stringify(lastChartView));}catch{}
  const visible=all.filter(e=>selectedLocations.includes(e.anatomicalId)&&e.date>=start&&e.date<=end);
  const labels=new Map(all.map(e=>[e.anatomicalId,e.anatomicalLocation]));
  const viewport=Math.max(280,root.parentElement.clientWidth-22);
