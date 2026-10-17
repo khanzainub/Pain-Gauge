@@ -36,3 +36,16 @@ Google OAuth needs the actual user's interactive consent. Automated tests use mo
 5. Test restore-before-upload on a new device, account switching on a shared device, token expiry, denied grants, network errors and another-device conflict.
 
 No real patient credentials or records are used by the included tests.
+
+
+## Care-team dashboard and directory
+
+`care-team.json` is the central registered-doctor directory (verified Google email plus display name). Maintainers add only authorized team members here through repository changes; no credentials belong in this file. `care-core.js` uses that directory for navigation. Actual data access is still enforced by Google Drive ACLs, not this public list.
+
+A patient’s explicit team consent includes registered future doctors. On the next connected sync, the app reconciles reader permissions for all registered doctors. While the patient page is open and their token is valid, team changes are checked every minute. This cannot change Drive permissions while a patient is offline; immediate membership changes without a patient session require a separately configured Google Group or backend, neither of which is configured here. Google Group membership alone also needs a reliable folder-discovery strategy for new members.
+
+Previous consent naming only the original doctor does not authorize a broader team. Those patients see the new team permission unchecked, with a separate option to remove earlier doctor access. No unrelated manual Drive shares are deleted by the app. Signing out does not revoke sharing.
+
+The admin overview shows each patient’s summary, highest latest location rating, short trend, sleep/mood and report date. Detail replaces the skeleton with time-series charts, joint comparison, selected-date bars, date/location heatmap (21 dates per page), individual location charts and collapsible full clinical details. Every chart uses latest entry per location/date; missing reports stay missing, not zero. Filters and selected patient are retained through refreshes, and unchanged details are not rebuilt.
+
+Run `node --test AIIMS/tests/*.test.cjs` for the mocked OAuth/Drive, account isolation, consent, aggregation and chart tests. Real Google sign-in and multi-account sharing still require interactive acceptance testing; no browser visual QA was available in this environment.

@@ -1,0 +1,7 @@
+{
+  "name": "Your care team",
+  "version": 1,
+  "doctors": [
+    { "email": "khanzainub@gmail.com", "name": "Zainab Khan" }
+  ]
+}
