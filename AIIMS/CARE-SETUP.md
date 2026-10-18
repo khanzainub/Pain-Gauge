@@ -59,3 +59,12 @@ Patient overview summary: the newest recorded date is identified first, then the
 ## Sign-in landing page
 
 The AIIMS front page offers English and Hindi, the instruction “To use, continue with Google.”, and a Google-branded button with a locally embedded standard-color G mark. Diary, sharing controls, admin dashboard and app navigation are hidden in the initial HTML before JavaScript executes. Only a verified Google userinfo response unlocks the appropriate patient or care-team view. Sign-out, failed authentication and token expiry return to the closed gate. No data or backup is deleted by the gate. Google tokens remain memory-only, so reopening/reloading requires connecting again. This is an interface gate, not encryption of existing browser storage or a replacement for Drive ACLs.
+
+
+## Overview and chart controls
+
+The care-team landing view defaults to All patients. The single selection offers All patients (name order), Highest pain first (latest-day peak descending), and Latest reports first (report date descending). These reorder rather than hide shared patients.
+
+The patient detail uses individual location checkboxes, Select all and Clear selection. Multiple locations can be shown together; selecting none shows an empty state rather than silently restoring all. Both the line chart and heatmap use that selection and the date range. Each line retains its location colour across selection changes. Entry-note clicks remain tied to the exact location and date.
+
+The line chart has a grey grid, pain ticks at 0, 2, 4, 6, 8, 10, and the full ISO date rotated vertically at every recorded-date tick. Dates are positioned by elapsed time. The chart widens and scrolls horizontally to prevent labels from overlapping. The heatmap also has full vertical dates and a sequential light-to-dark blue score scale, with foreground contrast chosen for readable values. Missing entries remain visually distinct from zero pain.
