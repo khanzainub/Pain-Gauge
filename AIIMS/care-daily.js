@@ -1,8 +1,8 @@
 /* One dated routine shared by every pain location; carried forward until changed. */
 (()=>{
 'use strict';
-const keys=['foodHabit','dietPatterns','dietNotes','medicationCategories','medication','medicationsTaken','medicationsSkipped','sleepHours','sleepQuality','mood','wellbeingNotes','periodStatus','periodStart','periodNotes','injectionNotes','injectionJoints'];
-const pick=p=>Object.fromEntries(keys.map(k=>[k,p[k]??(['dietPatterns','medicationCategories','injectionJoints'].includes(k)?[]:'')]));
+const keys=['foodHabit','dietPatterns','dietNotes','medicationCategories','medication','medicationsTaken','medicationsSkipped','sleepHours','sleepQuality','mood','wellbeingNotes','periodStatus','periodStart','periodNotes'];
+const pick=p=>Object.fromEntries(keys.map(k=>[k,p[k]??(['dietPatterns','medicationCategories'].includes(k)?[]:'')]));
 function saved(){try{return JSON.parse(localStorage.getItem(PROFILE)||'{}');}catch{return {};}}
 function days(p=saved()){
  const result={};
@@ -27,9 +27,17 @@ function commit(profile,date){
 }
 function ensureToday(){const p=saved();if(!p.dailyConditions?.[today()])commit({...p,...forDate(today())},today());}
 function injections(profile,rows=[]){
+ const saved=Array.isArray(profile.injections)?profile.injections:[];
+ if(profile.injectionVersion===2)return saved.filter(i=>!i.deleted);
+ // Preserve older notes once, collapsing their automatic daily carry-forward.
  const dated={};for(const row of [...rows].sort((a,b)=>String(a.updatedAt||a.createdAt||'').localeCompare(String(b.updatedAt||b.createdAt||''))))if(row.date)dated[row.date]=row;
  Object.assign(dated,profile.dailyConditions||{});
- return Object.entries(dated).flatMap(([date,p])=>(Array.isArray(p.injectionJoints)?p.injectionJoints:[]).filter(j=>j&&typeof j.id==='string'&&typeof j.label==='string').map(j=>({id:date+':'+j.id,date,anatomicalId:j.id,anatomicalLocation:j.label,notes:p.injectionNotes||''})));
+ const legacy=[],seen=new Map();for(const date of Object.keys(dated).sort()){
+  const p=dated[date];if(p.injectionJoints===undefined)continue;
+  const active=new Set();for(const j of Array.isArray(p.injectionJoints)?p.injectionJoints:[]){if(!j||typeof j.id!=='string'||typeof j.label!=='string')continue;active.add(j.id);const name=p.injectionNotes||'Injection';if(seen.get(j.id)!==name)legacy.push({id:'legacy:'+date+':'+j.id,date,name,anatomicalId:j.id,anatomicalLocation:j.label,createdAt:date+'T00:00:00Z',updatedAt:date+'T00:00:00Z'});seen.set(j.id,name);}
+  for(const id of seen.keys())if(!active.has(id))seen.delete(id);
+ }
+ const merged=new Map(legacy.map(i=>[i.id,i]));for(const i of saved)merged.set(i.id,i);return [...merged.values()].filter(i=>!i.deleted);
 }
 window.PainGaugeDaily={forDate,load,commit,ensureToday,injections};
 $('entryDate').addEventListener('change',()=>{if($('entryDate').value&&$('entryDate').value<=today())load($('entryDate').value);});
