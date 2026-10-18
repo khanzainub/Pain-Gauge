@@ -71,12 +71,38 @@ header .care-header-tools{display:flex;align-items:center;gap:10px}header #langu
 
 #careAdmin .care-export-patient-choices{display:grid;gap:6px;max-height:240px;overflow:auto;border:1px solid #dce3eb;padding:8px;border-radius:8px;margin:10px 0 14px}#careAdmin .care-export-patient-choices .check{display:flex;align-items:center;gap:9px;font-size:13px;padding:7px;margin:0}#careAdmin .care-export-patient-choices input{width:18px;height:18px;flex:none}#careAdmin .care-export-patient-choices small{display:block;color:#52627a;font-size:11px}#careAdmin #careExportSelection>.actions{margin-top:12px}
 
-/* Shared control scale and a restrained navy/teal palette. */
-body{--blue:#25656d;--blue2:#eef6f7;--line:#d7e2e7;--ink:#172d3a;--muted:#526776}
+/* Shared control scale. */
+body{--blue:#176eae;--blue2:#edf7ff;--line:#d9e6f2;--ink:#172d3a;--muted:#526776}
 #carePatientMain button,#carePatientMain a.tool,#careAdmin button:not(.care-patient):not(.care-mini-chart),#careHeaderAccount button{font:500 14px/1.4 system-ui,sans-serif!important;min-height:42px!important;padding:9px 13px!important;border-radius:8px!important;box-sizing:border-box}
-#carePatientMain .primary,#careAdmin .primary{background:#25656d;color:white;border:1px solid #25656d}
-#carePatientMain .tool,#careAdmin .tool{background:#fff;color:#234b60;border:1px solid #ccdbe2}
-#carePatientMain button:hover,#careAdmin button.tool:hover{filter:brightness(.97)}#carePatientMain input,#carePatientMain select,#carePatientMain textarea,#careAdmin input,#careAdmin select{accent-color:#25656d}
-#careAccount>.card{box-shadow:none;padding:12px 16px;border:1px solid #dce6eb}#careStatus{font-size:12px;color:#526776;line-height:1.5}
-.care-info{padding-top:0}.care-info>.card{padding:15px 18px;margin-bottom:12px;border:1px solid #dce6eb;border-radius:12px;box-shadow:none}.care-info summary{cursor:pointer;font-size:14px;font-weight:600;color:#234b60}.care-info p{font-size:13px;line-height:1.7;color:#425a69;margin:12px 0 0}.care-info a{color:#25656d}
+#carePatientMain .primary,#careAdmin .primary{background:#176eae;color:white;border:1px solid #176eae}
+#carePatientMain .tool,#careAdmin .tool{background:#fff;color:#244f77;border:1px solid #ccdbe2}
+#carePatientMain button:hover,#careAdmin button.tool:hover{filter:brightness(.97)}#carePatientMain input,#carePatientMain select,#carePatientMain textarea,#careAdmin input,#careAdmin select{accent-color:#176eae}
+#careAccount>.card{box-shadow:none;padding:12px 16px;border:1px solid #dce7f2}#careStatus{font-size:12px;color:#526776;line-height:1.5}
+.care-info{padding-top:0}.care-info>.card{padding:15px 18px;margin-bottom:12px;border:1px solid #dce7f2;border-radius:12px;box-shadow:none}.care-info summary{cursor:pointer;font-size:14px;font-weight:600;color:#244f77}.care-info p{font-size:13px;line-height:1.7;color:#465f76;margin:12px 0 0}.care-info a{color:#176eae}
 #carePatientMain .section-title{font-size:15px!important}#carePatientMain h2{font-size:19px!important}#carePatientMain .privacy{font-size:12px;line-height:1.6}#careAdmin .care-score-badge{font-size:20px}#careHeaderMenu .care-menu-panel{max-height:75svh;overflow:auto}
+
+/* Sky-blue theme shared by patient and doctor views. */
+:root,body{--blue:#176eae;--blue2:#eaf6ff;--line:#d7e5f1;--ink:#20384e;--muted:#506880;--sky-selected:#163f73}
+body{background:#f3f8fd;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.55}
+#carePatientMain,#careAdmin,.care-info,#careAccount{font-family:inherit;color:var(--ink)}
+#carePatientMain .card,#careAdmin .card,.care-info>.card,#careAccount>.card{border:1px solid #d9e6f2;border-radius:12px;background:#fff;box-shadow:0 3px 14px #183b5c08}
+#carePatientMain h2,#careAdmin h2{font:650 20px/1.4 system-ui,sans-serif!important;letter-spacing:-.25px;color:#20384e}
+#carePatientMain h3,#careAdmin h3{font:600 16px/1.45 system-ui,sans-serif;color:#20384e}
+#carePatientMain label,#careAdmin label{font-size:14px;line-height:1.5}
+#carePatientMain input:not([type=checkbox]):not([type=range]),#carePatientMain select,#carePatientMain textarea,#careAdmin input:not([type=checkbox]),#careAdmin select{font:400 16px/1.45 system-ui,sans-serif;border:1px solid #cbddeb;border-radius:8px;background:#fff;color:#20384e;box-sizing:border-box}
+#carePatientMain .tool,#careAdmin .tool,#careHeaderAccount .tool{background:#edf7ff;border:1px solid #c1dcee;color:#245782}
+#carePatientMain .primary,#careAdmin .primary{background:#176eae;color:#fff;border-color:#176eae}
+#carePatientMain .tool:hover,#careAdmin .tool:hover{background:#deeffc;filter:none}
+#carePatientMain button:active,#careAdmin button:active,#careHeaderAccount button:active,header #languageSwitch button[aria-pressed=true],#carePatientMain button[aria-pressed=true],#careAdmin button[aria-pressed=true],button.care-selected{background:#163f73!important;border-color:#163f73!important;color:#fff!important;filter:none}
+#carePatientMain button:focus-visible,#careAdmin button:focus-visible,header button:focus-visible,#careHeaderMenu>summary:focus-visible{outline:3px solid #64b8f0;outline-offset:3px}
+#careHeaderMenu[open]>summary{background:#163f73;color:white;border-color:#163f73}
+#carePatientMain .care-input-card[open]>summary{background:#e7f4ff;color:#164e83;border-bottom-color:#c7e0f3}
+#carePatientMain .care-input-card>summary::after{color:#176eae}
+#careAdmin .care-location-check:has(input:checked){background:#163f73;border-color:#163f73;color:white}
+#careAdmin .care-location-check:has(input:checked) span{color:white}
+#carePatientMain input,#careAdmin input,#carePatientControls input{accent-color:#176eae}
+#careAdmin .care-avatar,#careAdmin .care-score-badge{background:#e6f3ff;color:#205c91}
+#careAdmin .care-tap-hint{background:#edf7ff;color:#245782}#careAdmin .care-point-note{background:#f0f7fd;border-left-color:#399bd8}
+#careAdmin .care-patient[aria-pressed=true] b,#careAdmin .care-patient[aria-pressed=true] small,#careAdmin .care-patient[aria-pressed=true] p,#careAdmin .care-patient[aria-pressed=true] span{color:inherit}
+.care-info summary,.care-info a{color:#245782}
+@media(max-width:600px){#carePatientMain h2,#careAdmin h2{font-size:19px!important}#carePatientMain .card,#careAdmin .care-chart-card,#careAdmin .care-overview-card{padding:16px}#carePatientMain .care-input-card>summary{font-size:16px}}
