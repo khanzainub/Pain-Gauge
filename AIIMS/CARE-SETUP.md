@@ -75,3 +75,5 @@ All fields returned by the patient form's getProfile are covered by an automated
 The versioned care-profile-v14.js deployment asset must match care.js; a test enforces equality.
 
 Patient sharing UI is a single consent checkbox. Manual sync, folder and permission tools are not presented to patients. Sync is scheduled after saved changes, every 120 seconds while the signed-in patient page is visible, and when it becomes visible again. Automatic sync does not bypass conflict checks; recovery choices appear only when different diaries need a decision. Session invalidation clears the periodic timer. Versioned runtime asset is now care-profile-v15.js, tested against care.js.
+
+Shared header now uses compact language choices and a Menu disclosure for navigation and account tools. Patient section headings are unnumbered. All current profile/routine form changes save locally and schedule sync; the existing getProfile/setProfile round trip retains medication, food categories and wellbeing until changed, including explicit clearing. JAK inhibitor remains an existing medication category. Current deployment runtime: care-profile-v16.js.
