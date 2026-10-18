@@ -104,3 +104,7 @@ The bottom About dropdown credits Zainab Khan and explains the pain-inspired dev
 ## Statistical Assessment (v26)
 
 Doctor-only tab using the existing authorized Drive records. No database, OAuth scope, patient form or historical record changes. Local Pyodide worker; runtime packages load on demand. Clinical schema, methods, guardrails, unavailable advanced models, exports and reference tests are documented in `STATISTICAL-METHODS.md`. The doctor tab remains English. Source refresh retains dated results, offers Use updated data and preserves selected cohort filters. Run stats explicitly recalculates. Account changes or loss of source access clear results.
+
+## Responsive layout (v28)
+
+`care-responsive.css` is the final AIIMS-only presentation layer for both roles. It aligns shell widths and action rows, contains charts and dialogs, and keeps mobile selects full width while pairing shorter inputs where space permits. Under 360px the short fields also stack. Patient skeleton geometry and all clinical/statistical logic are preserved. Tablet layouts remove the sticky pain-entry sidebar; desktop keeps it and places collapsed routine cards in two columns, with opened cards spanning the row. Existing application and statistical UI interaction checks pass; actual browser/device rendering was unavailable for visual QA.

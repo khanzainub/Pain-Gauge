@@ -1,0 +1,107 @@
+/* Shared responsive layout for the AIIMS patient and doctor interfaces.
+   Clinical records, skeleton geometry, chart scales and behaviour are untouched. */
+header .head,#careAccount.wrap,#carePatientMain.wrap,#careAdmin.wrap,.care-footer.wrap{max-width:1280px}
+#carePatientMain,#careAdmin{padding-bottom:20px}
+#carePatientMain :is(.two,.check-grid,.export-groups),#careAdmin :is(.stats-grid,.care-export-controls,.care-filter-card){min-width:0}
+#carePatientMain :is(.two,.export-groups){grid-template-columns:repeat(2,minmax(0,1fr))}
+#carePatientMain :is(.two,.export-groups)>*,#careAdmin :is(.stats-grid,.care-export-controls,.care-filter-card)>*{min-width:0}
+#carePatientMain :is(input,select,textarea),#careAdmin :is(input,select,textarea){max-width:100%;min-width:0}
+#carePatientMain :is(input[type=date],input[type=number],input[type=text],select,textarea),#careAdmin :is(input[type=date],input[type=number],input[type=search],select){width:100%;min-height:44px}
+#carePatientMain :is(.care-input-card,.pain-entry,.figure,.chart-box),#careAdmin :is(.card,.care-patient,.stats-result){min-width:0;max-width:100%}
+#carePatientMain :is(label,summary,.selected,.entry),#careAdmin :is(label,summary,.care-card-condition,.care-detail-head p){overflow-wrap:anywhere}
+#carePatientMain :is(.care-section-actions,.actions),#careAdmin .actions{align-items:center;gap:8px}
+#carePatientMain :is(.care-section-actions,.actions)>.primary,#careAdmin .actions>.primary{width:auto;margin-top:0}
+#carePatientMain .care-section-actions>button,#carePatientMain .care-input-card>.actions>button{flex:0 1 auto}
+#carePatientMain .care-section-actions>[role=status]{flex:1 1 180px}
+#careAdmin .care-workspace-head>div,#careAdmin .care-detail-head>div,header .brand{min-width:0}
+#careAdmin .care-workspace-head>button,#careAdmin .care-detail-head>button{flex-shrink:0}
+header .brand{flex:1 1 auto}
+header .care-header-tools{flex:0 0 auto}
+#careHeaderMenu .care-menu-panel{max-width:calc(100vw - 24px);overscroll-behavior:contain}
+#careHeaderMenu #careAccountActions{display:flex;width:100%;flex-wrap:wrap;gap:7px}
+#careHeaderMenu #careAccountActions>button{max-width:100%;white-space:normal}
+#careHeaderMenu #careSignIn{flex:1 1 190px}
+#careHeaderMenu #careSignOut{flex:0 1 auto}
+#carePatientMain .chart-box,#careAdmin :is(#careDailyTrend,.care-heat-scroll,.stats-table-wrap){max-width:100%;min-width:0;overscroll-behavior-x:contain}
+#careStatsPanel .stats-model{height:100%}
+#careStatsPanel .stats-model-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+#careStatsPanel .stats-choices{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:7px}
+#careStatsPanel .stats-choices label{min-height:40px;align-items:center}
+#careStatsPanel .stats-choices input{margin:0;min-height:17px}
+#careStatsPanel .stats-metrics>span{flex:1 1 155px}
+#careStatsPanel .stats-snapshot-notice{align-items:center;flex-wrap:wrap}
+#careStatsPanel :is(.actions,.stats-small-actions){flex-wrap:wrap}
+#careStatsPanel .actions>button{flex:0 1 auto}
+#careAdmin .care-card-head>div,#careAdmin .care-location-check span{min-width:0;overflow-wrap:anywhere}
+#careAdmin .care-profile-group summary,#careStatsPanel .stats-secondary>summary{line-height:1.5;padding-block:4px}
+.care-footer{padding-top:14px;padding-bottom:max(20px,env(safe-area-inset-bottom))}
+.care-footer .care-about-content{margin-inline:auto;text-align:left}
+@media(min-width:1001px){
+  #carePatientMain .layout{grid-template-columns:minmax(0,1fr) minmax(290px,320px);gap:20px}
+  #carePatientMain #dailySection.care-routine-sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:20px}
+  #carePatientMain #dailySection>.care-input-card{margin:0!important}
+  #carePatientMain #dailySection>.care-input-card[open]{grid-column:1/-1}
+  #careStatsPanel .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px}
+  #careAdmin .care-patient-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(min-width:641px) and (max-width:1000px){
+  #careAdmin .care-patient-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #careAdmin .care-export-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:1000px){
+  #carePatientMain .layout{grid-template-columns:minmax(0,1fr)}
+  #carePatientMain .pain-entry{position:static;top:auto}
+  #carePatientMain .export-groups{grid-template-columns:minmax(0,1fr);gap:16px}
+}
+@media(max-width:640px){
+  #careAccount.wrap,#carePatientMain.wrap,#careAdmin.wrap,.care-footer.wrap{padding-inline:12px}
+  #careAdmin{padding-top:16px}
+  header .head{align-items:center;gap:10px!important}
+  header .brand h1{font-size:22px!important;line-height:1.25}
+  header .brand p{font-size:12px!important;line-height:1.45;max-width:none}
+  #careAdmin .care-workspace-head,#careAdmin .care-detail-head{gap:10px;margin-bottom:14px}
+  #careAdmin .care-workspace-head h2,#careAdmin .care-detail-head h2{margin-block:0 5px}
+  #carePatientMain .card,#careAdmin :is(.care-chart-card,.care-overview-card,.care-profile-details,.care-export-panel),#careStatsPanel .card{padding:14px;border-radius:12px}
+  #carePatientMain .care-input-card>summary{padding:14px 15px;font-size:16px}
+  #carePatientMain .care-input-body,#carePatientMain .care-input-card>.section{padding:14px 15px!important}
+  #carePatientMain .two{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #carePatientMain .check-grid{grid-template-columns:minmax(0,1fr)}
+  #careAdmin .care-patient-grid{grid-template-columns:minmax(0,1fr);gap:12px}
+  #careAdmin .care-overview-metrics{gap:8px;margin-bottom:14px}
+  #careAdmin .care-overview-stat{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:8px;padding:11px;min-width:0;min-height:110px}
+  #careAdmin .care-overview-stat span{font-size:11px;line-height:1.45;min-height:0;overflow-wrap:anywhere}
+  #careAdmin .care-overview-stat b{font-size:24px;line-height:1.2}
+  #careAdmin .care-filter-card{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  #careAdmin .care-export-controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  #careAdmin .care-export-controls>div:has(>select){grid-column:1/-1}
+  #careAdmin .care-location-check{align-items:flex-start;min-height:44px}
+  #careAdmin .care-location-check input{margin-top:2px}
+  #careAdmin .care-selection-actions{flex-wrap:wrap}
+  #careAdmin .care-chart-title{gap:10px;margin-bottom:12px}
+  #careAdmin .care-chart-title .actions{width:100%;gap:7px}
+  #careStatsPanel .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  #careStatsPanel .stats-grid>div:has(>select),#careStatsPanel .stats-grid>div:has(>input[type=search]){grid-column:1/-1}
+  #careStatsPanel :is(input:not([type=checkbox]):not([type=radio]),select){font-size:16px;min-height:44px}
+  #careStatsPanel .stats-model-grid,#careStatsPanel .stats-choices{grid-template-columns:minmax(0,1fr)}
+  #careStatsPanel .stats-small-actions{gap:7px}
+  #careStatsPanel .stats-metrics{gap:7px}
+  #careStatsPanel .stats-metrics>span{flex-basis:130px}
+  .stats-doctor-nav{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px}
+  #careAdmin .stats-doctor-nav button{white-space:normal;text-align:center;padding:9px 10px!important;font-size:13px!important}
+  #careAdmin #carePointDialog,#chartEntryDialog{max-width:calc(100vw - 24px);max-height:80svh}
+  #careAdmin .care-point-dialog-head>button{flex-shrink:0}
+}
+@media(max-width:359px){
+  header .brand h1{font-size:20px!important}
+  header #languageSwitch button{padding-inline:6px!important;min-width:36px!important}
+  #carePatientMain .two,#careAdmin .care-filter-card,#careAdmin .care-export-controls,#careStatsPanel .stats-grid{grid-template-columns:minmax(0,1fr)}
+  #careAdmin .care-filter-card>div,#careAdmin .care-export-controls>div,#careStatsPanel .stats-grid>div{grid-column:1/-1}
+  #careAdmin #careLocationChecks{grid-template-columns:minmax(0,1fr)}
+  #carePatientMain .care-section-actions>button{flex:1 1 110px}
+}
+@media(max-width:640px){
+  #careSleepSection .two,#carePeriodFields .two{grid-template-columns:minmax(0,1fr)}
+  #carePatientMain .chart-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #carePatientMain .chart-controls>div:first-child{grid-column:1/-1}
+}
+@media(max-width:359px){#carePatientMain .chart-controls{grid-template-columns:minmax(0,1fr)}}
