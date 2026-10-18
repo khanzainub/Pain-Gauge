@@ -24,3 +24,18 @@ body[data-care-auth="signed-in"] #careAccount>.card:not(:has(#carePatientControl
 @media(max-width:600px){body[data-care-auth="signed-in"] .brand h1{font-size:24px}body[data-care-auth="signed-in"] .brand p{font-size:13px}body[data-care-auth="signed-in"] #languageSwitch{width:auto}body[data-care-auth="signed-in"] #languageSwitch button{min-width:48px;padding:7px 9px;font-size:13px}#careHeaderAccount{align-items:flex-start;flex-direction:column;gap:8px}#careHeaderAccount .actions{width:auto}#careHeaderAccount #careIdentity{font-size:12px}}
 
 .care-profile-group{border-top:1px solid #e2e7ed;padding:12px 0}.care-profile-group:first-of-type{margin-top:14px}.care-profile-group summary{font-size:14px;font-weight:600;cursor:pointer}.care-profile-details>summary{cursor:pointer}.care-point-note:empty{display:none}
+
+/* Compact notes balloon, with contained scrolling for longer entries. */
+#careAdmin #carePointDialog{width:min(420px,calc(100% - 24px));max-height:70svh;border-radius:12px;box-shadow:0 10px 40px #17203330}
+#careAdmin #carePointDialog::backdrop{background:#15283d30}
+#careAdmin .care-point-dialog-head{padding:10px 14px;gap:8px}
+#careAdmin .care-point-dialog-head h2{font-size:14px;line-height:1.4}
+#careAdmin .care-point-dialog-head button{font-size:12px;padding:6px 9px;min-height:36px}
+#careAdmin #carePointBody{padding:4px 14px 10px}
+#careAdmin .care-point-entry{padding:8px 0 10px}
+#careAdmin .care-point-entry-head h3{font-size:14px;margin:4px 0}
+#careAdmin .care-point-entry-head>b{font-size:16px;padding:5px 8px}
+#careAdmin .care-point-note{padding:8px 10px;margin:8px 0}
+#careAdmin .care-point-note h4{font-size:11px;margin-bottom:4px}
+#careAdmin .care-point-note p{font-size:12px;line-height:1.5;margin:3px 0}
+#careAdmin .care-profile-group .care-detail-field{font-size:13px;line-height:1.55;margin:7px 0}
