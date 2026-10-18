@@ -117,3 +117,13 @@ body{background:#f3f8fd;color:var(--ink);font-family:system-ui,-apple-system,Bli
 #carePatientMain button.care-mood-choice:hover{border-color:#6ab5e7!important}
 #carePatientMain #careMoodSelection{margin:4px 0 12px;font-size:12px;color:#506880}
 @media(min-width:850px){#carePatientMain .care-mood-choices{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+/* Quiet information links, shared by both roles, at the bottom of the page. */
+.care-footer{padding:18px 16px 28px;text-align:center;color:#526c82;border-top:1px solid #dce8f2;margin-top:10px}
+.care-footer nav{display:flex;justify-content:center;align-items:center;gap:8px 18px;flex-wrap:wrap}
+.care-footer .care-footer-link{font:400 12px/1.5 system-ui,sans-serif;color:#3e6385;background:none;border:0;border-radius:0;padding:4px 0;min-height:32px;text-decoration:none;cursor:pointer}
+.care-footer .care-footer-link:hover{text-decoration:underline}.care-footer small{display:block;font-size:11px;margin-top:8px}.care-footer small a{color:inherit;text-decoration:none}
+.care-info-dialog{width:min(520px,calc(100% - 28px));max-height:80svh;overflow:auto;padding:18px;border:1px solid #d6e4f0;border-radius:12px;background:#fff;color:#20384e;box-sizing:border-box}
+.care-info-dialog::backdrop{background:#15324e55}.care-info-dialog-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.care-info-dialog h2{font-size:18px;margin:0}.care-info-dialog p{font-size:14px;line-height:1.7}.care-info-dialog .tool{font:500 13px system-ui;min-height:38px;padding:8px 12px;border:1px solid #c9dfee;border-radius:8px;background:#edf7ff;color:#245782}
+
+.care-footer details{font-size:12px;text-align:left}.care-footer summary{cursor:pointer;color:#376681;padding:8px 0;font-weight:500}.care-about-content{max-width:680px;font-size:13px;line-height:1.65;color:#526575}.care-about-content p{margin:8px 0}.care-footer>a{display:inline-block;margin:6px 0 14px}

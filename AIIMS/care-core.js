@@ -22,6 +22,7 @@ function mergeBackups(local,remote,base=null){
  for(const id of new Set([...lm.keys(),...rm.keys(),...bm.keys()])){const l=lm.get(id),r=rm.get(id),b=bm.get(id);if(base&&b&&(!l&&same(r,b)||!r&&same(l,b)))continue;let chosen;if(!l)chosen=r;else if(!r)chosen=l;else if(same(l,r))chosen=l;else if(base&&same(l,b))chosen=r;else if(base&&same(r,b))chosen=l;else chosen=String(l.updatedAt||l.createdAt||'')>String(r.updatedAt||r.createdAt||'')?l:r;if(chosen)entries.push(chosen);}
  return {...remote,...local,profile,entries,profileUpdatedAt:[local.profileUpdatedAt||'',remote.profileUpdatedAt||''].sort().pop()};
 }
+function languageKey(account,doctor=false){return doctor?null:account?.patientId?'painGaugeAIIMS:'+account.patientId+':language':'painGaugeAIIMS:landing:language';}
 async function patientId(sub){const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('pain-gauge-aiims:'+sub));return 'PG-'+Array.from(new Uint8Array(hash)).slice(0,10).map(x=>x.toString(16).padStart(2,'0')).join('').toUpperCase();}
-const api={configureTeam,teamDoctors,teamEmails,ADMIN_EMAIL,normalizeEmail,isAdmin,latestLocations,latestDayPain,validBackup,contentOf,mergeBackups,patientId};root.PainGaugeCareCore=api;if(typeof module!=='undefined')module.exports=api;
+const api={configureTeam,teamDoctors,teamEmails,ADMIN_EMAIL,normalizeEmail,isAdmin,latestLocations,latestDayPain,validBackup,contentOf,mergeBackups,languageKey,patientId};root.PainGaugeCareCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);
