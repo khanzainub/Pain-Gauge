@@ -72,7 +72,12 @@ $id('careAdminLoad').onclick=()=>{if(!isAdmin()){adminStatus('Sign in with the a
 $id('driveConnectBtn').onclick=()=>{if(window.AndroidDrive?.connect&&!identity)return nativeHandlers.connect();$id('careSignIn').click();};$id('driveDisconnectBtn').onclick=()=>{$id('careSignOut').click();};$id('driveBackupBtn').onclick=()=>{if(window.AndroidDrive?.backup&&!identity)return nativeHandlers.backup();return backup();};$id('driveRestoreBtn').onclick=()=>{if(window.AndroidDrive?.restore&&!identity)return nativeHandlers.restore();return restore();};
 $id('gender').addEventListener('change',()=>{$id('carePeriodFields').hidden=$id('gender').value!=='Female';});
 window.addEventListener('pain-gauge-records-changed',()=>schedule());
-function saveCurrentProfile(){if(!identity||isAdmin())return false;try{localStorage.setItem(PROFILE,JSON.stringify(getProfile()));savePrefs({...prefs(),profileUpdatedAt:new Date().toISOString()});schedule();return true;}catch{status('Your changes could not be saved on this phone.');return false;}}
+function updateMoodPicker(){const value=$id('careMood').value;$id('careMoodChoices').querySelectorAll('[data-mood]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.mood===value)));$id('careMoodSelection').textContent=value||'Not recorded';}
+window.updatePainGaugeMood=updateMoodPicker;
+$id('careMoodChoices').querySelectorAll('[data-mood]').forEach(button=>button.onclick=()=>{if(!identity||isAdmin())return;$id('careMood').value=button.dataset.mood;updateMoodPicker();saveCurrentProfile();});
+$id('careMood').addEventListener('change',updateMoodPicker);
+updateMoodPicker();
+function saveCurrentProfile(){if(!identity||isAdmin())return false;updateMoodPicker();try{localStorage.setItem(PROFILE,JSON.stringify(getProfile()));savePrefs({...prefs(),profileUpdatedAt:new Date().toISOString()});schedule();return true;}catch{status('Your changes could not be saved on this phone.');return false;}}
 for(const id of ['carePatientName','careFoodHabit','age','gender','diagnosis','otherDiagnosis','diagnosisStatus','duration','symptomYear','diagnosisYear','diseaseNotes','dietPatterns','dietNotes','medCats','medText','medTaken','medSkipped','careSleepHours','careSleepQuality','careMood','careWellbeingNotes','carePeriodStatus','carePeriodStart','carePeriodNotes'])$id(id).addEventListener('change',saveCurrentProfile);
 const formSections={
  Profile:{panel:'profileSection',save:'saveProfileBtn',clear:'careClearProfile',message:'profileSaved',fields:['carePatientName','age','gender','diagnosis','otherDiagnosis','diagnosisStatus','duration','symptomYear','diagnosisYear','diseaseNotes']},
