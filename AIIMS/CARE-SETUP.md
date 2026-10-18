@@ -54,3 +54,8 @@ The all-locations chart never truncates the location list or collapses it into a
 
 
 Patient overview summary: the newest recorded date is identified first, then the highest pain rating among all saved records on that date is shown with its location. A higher report earlier on that date is included; records from older dates are excluded. The label is “Highest pain in latest entry”. This summary is distinct from the chart’s latest rating per joint on each date. Edited-overwritten records cannot be reconstructed. Patient cards show identity, condition and pain only; sleep, mood and other context remain available inside the patient detail and entry notes. Admin labels use plain wording such as “Pain location”, “Pain by location”, “Food” and “Medicines”.
+
+
+## Sign-in landing page
+
+The AIIMS front page offers English and Hindi, the instruction “To use, continue with Google.”, and a Google-branded button with a locally embedded standard-color G mark. Diary, sharing controls, admin dashboard and app navigation are hidden in the initial HTML before JavaScript executes. Only a verified Google userinfo response unlocks the appropriate patient or care-team view. Sign-out, failed authentication and token expiry return to the closed gate. No data or backup is deleted by the gate. Google tokens remain memory-only, so reopening/reloading requires connecting again. This is an interface gate, not encryption of existing browser storage or a replacement for Drive ACLs.
