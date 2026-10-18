@@ -22,3 +22,5 @@ body[data-care-auth="signed-in"] #careAccount{padding-top:0}
 body[data-care-auth="signed-in"] #careAccount>.card:not(:has(#carePatientControls:not([hidden]))):not(:has(#careStatus:not([hidden]))){display:none}
 .care-filter-card>div{min-width:0}.care-filter-card input[type="date"]{min-width:0;width:100%;max-width:100%;box-sizing:border-box}
 @media(max-width:600px){body[data-care-auth="signed-in"] .brand h1{font-size:24px}body[data-care-auth="signed-in"] .brand p{font-size:13px}body[data-care-auth="signed-in"] #languageSwitch{width:auto}body[data-care-auth="signed-in"] #languageSwitch button{min-width:48px;padding:7px 9px;font-size:13px}#careHeaderAccount{align-items:flex-start;flex-direction:column;gap:8px}#careHeaderAccount .actions{width:auto}#careHeaderAccount #careIdentity{font-size:12px}}
+
+.care-profile-group{border-top:1px solid #e2e7ed;padding:12px 0}.care-profile-group:first-of-type{margin-top:14px}.care-profile-group summary{font-size:14px;font-weight:600;cursor:pointer}.care-profile-details>summary{cursor:pointer}.care-point-note:empty{display:none}
