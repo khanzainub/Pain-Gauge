@@ -68,3 +68,6 @@ NODE_PATH=/tmp/pain-gauge-testdeps/node_modules node AIIMS/tests/stats-wasm.cjs
 ```
 
 The native reference environment uses `AIIMS/tests/stats-requirements.txt`; the WebAssembly test uses the actual distribution's pinned compiled packages. Native Matplotlib may be newer for NumPy 2 compatibility; the deployed PDF backend remains the Pyodide-built 3.8.4 package.
+
+### Variable-selection correction (v27)
+Single-predictor methods use a native single-select dropdown. Multivariable models and MCA/log-linear analysis use actual checkbox selections with limits of six predictors or three additional categorical variables. Search filters that list and never becomes a variable value. Constant recorded fields remain selectable and are labelled; statistical eligibility is still enforced by the engine. Unrecorded input fields are visible but disabled with Not recorded. Outcome and selected predictors are excluded from the stratum selector.
