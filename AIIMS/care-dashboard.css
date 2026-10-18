@@ -46,3 +46,23 @@ header .care-header-tools{display:flex;align-items:center;gap:10px}header #langu
 #carePatientMain{font:14px/1.55 system-ui,sans-serif}#carePatientMain h2,#carePatientMain .profile-card>summary{font-size:19px;font-weight:650;line-height:1.4}#carePatientMain h3{font-size:16px;line-height:1.4}#carePatientMain label{font-size:14px;font-weight:550}#carePatientMain .small{font-size:12px;line-height:1.5}#carePatientMain input,#carePatientMain select,#carePatientMain textarea{font:16px/1.45 system-ui,sans-serif;padding:10px 12px}#carePatientMain button,#carePatientMain .tool{font-size:14px}#carePatientMain .card{padding:18px;border-radius:14px}#carePatientMain .routine-options>summary{font-size:14px;font-weight:600}#carePatientControls>.check{font-size:15px;line-height:1.5;font-weight:600;display:flex;align-items:center;gap:12px}#carePatientControls #careShare{width:22px;height:22px;flex:none}
 #careAdmin h2{font-size:22px}#careAdmin h3{font-size:16px}#careAdmin .tool{font-size:13px;padding:9px 12px}#careAdmin .care-detail-head p{font-size:13px;line-height:1.6}#careAdmin .care-eyebrow{font-size:10px}#careAdmin .care-workspace-head,#careAdmin .care-detail-head{margin-bottom:18px}
 @media(max-width:600px){header .head{flex-wrap:nowrap!important;gap:8px!important}header .brand h1{font-size:22px!important}header .brand p{font-size:12px!important;max-width:190px;margin-top:4px}header .care-header-tools{gap:5px}#careHeaderMenu>summary span{display:none}#carePatientMain .card{padding:16px}#carePatientMain h2,#carePatientMain .profile-card>summary{font-size:18px}}
+
+/* One clearly bounded card for each kind of patient information. */
+#dailySection.care-routine-sections{padding:0;margin:0;background:none;border:0;box-shadow:none}
+#carePatientMain .care-input-card{padding:0!important;overflow:hidden;margin:0 0 12px!important;border:1px solid #dce3ec;border-radius:12px;background:#fff;box-shadow:0 3px 14px #243b5310}
+#carePatientMain .care-input-card>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;padding:16px 18px;cursor:pointer;font:600 16px/1.4 system-ui,sans-serif;margin:0!important}
+#carePatientMain .care-input-card>summary::-webkit-details-marker{display:none}
+#carePatientMain .care-input-card>summary::after{content:'+';font:400 22px/1 system-ui;color:#285b9a}
+#carePatientMain .care-input-card[open]>summary{border-bottom:1px solid #e5eaf0;background:#f8fafc}
+#carePatientMain .care-input-card[open]>summary::after{content:'−'}
+#carePatientMain .care-input-body,#carePatientMain .care-input-card>.section{padding:16px 18px!important}
+#carePatientMain .care-input-card>.actions{padding:0 18px 16px;margin:0}
+#carePatientMain .care-input-card .care-section-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;border-top:1px solid #e5eaf0;padding-top:14px;margin-top:18px}
+#carePatientMain .care-section-actions button,#carePatientMain .care-input-card>.actions button{font-size:14px;min-height:42px;padding:9px 16px}
+#carePatientMain .care-input-card .routine-options>summary{margin:0;font-size:14px}
+#carePatientMain .care-input-card input:not([type=checkbox]),#carePatientMain .care-input-card select,#carePatientMain .care-input-card textarea{width:100%;box-sizing:border-box;border:1px solid #ccd6e2;border-radius:8px;background:white;color:#172033;margin-top:5px;margin-bottom:12px}
+#carePatientMain .care-input-card label{display:block;margin:10px 0 0;font-weight:550}
+#carePatientMain .care-input-card label.check{display:flex;align-items:center;gap:9px;font-weight:400;margin:4px 0}
+#carePatientMain .care-input-card .check input{width:18px;height:18px;min-height:18px;flex:none}
+#careRecovery{border-top:1px solid #e3e8ef;margin-top:12px;padding-top:10px;font-size:12px}#careRecovery>summary{cursor:pointer;font-size:13px;font-weight:600}#careRecovery .actions{display:grid;grid-template-columns:1fr}#careRecovery .tool{font-size:12px}
+#careAccount{padding-top:0}#careAccount>.card{padding:14px 18px;margin-bottom:12px}#careStatus{font-size:12px;line-height:1.5;margin:10px 0 0}
