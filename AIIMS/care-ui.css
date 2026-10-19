@@ -5,3 +5,27 @@
 @media(max-width:600px){.care-ui-dialog{padding:12px}.care-ui-dialog .care-ui-search{font-size:16px}.care-ui-date-nav input{font-size:16px}#careAdmin .care-location-check:has(input:checked){background:#eaf6ff;border-color:#93bdda;color:#20384e}#careAdmin .care-location-check:has(input:checked) span{color:#20384e}#careAdmin .care-location-check{overflow-wrap:anywhere}#careAdmin .care-detail-head,#careAdmin .care-chart-title{min-width:0}#careAdmin .care-detail-head>div,#careAdmin .care-chart-title>div,#carePatientMain .section-head>div{min-width:0}#careAdmin .care-chart-title .actions{flex-wrap:wrap}.care-menu-panel{overscroll-behavior:contain}.care-ui-dialog{max-width:calc(100vw - 24px)}}
 @media(prefers-reduced-motion:reduce){.care-ui-dialog{scroll-behavior:auto}}
 input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #64b8f0;outline-offset:1px}
+
+/* Existing calendar-style close buttons, reused ONLY in the header menu
+   (patient and doctor) and the patient chart-entry dialog. */
+#careHeaderMenu .care-menu-dismiss{display:flex;justify-content:flex-end;margin:0 0 6px}
+#chartEntryDialog .care-chart-entry-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px}
+#chartEntryDialog .care-chart-entry-head h3{margin:0;min-width:0}
+#careHeaderMenu .care-menu-dismiss .care-ui-close,
+#chartEntryDialog .care-chart-entry-head .care-ui-close{
+  box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;
+  flex:0 0 34px;width:34px;min-width:34px;height:34px;min-height:34px!important;
+  margin:0;padding:5px!important;
+  border:0;border-radius:7px;background:#edf7ff;color:#245782;
+  font:500 22px/1 system-ui,sans-serif;box-shadow:none;cursor:pointer;
+}
+#careHeaderMenu .care-menu-dismiss .care-ui-close:hover,
+#chartEntryDialog .care-chart-entry-head .care-ui-close:hover{background:#eaf6ff}
+#careHeaderMenu .care-menu-dismiss .care-ui-close:focus-visible,
+#chartEntryDialog .care-chart-entry-head .care-ui-close:focus-visible{outline:2px solid #176eae;outline-offset:2px}
+#chartEntryDialog>article>button.primary{
+  box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;
+  width:auto!important;max-width:100%;min-height:40px!important;
+  margin-top:9px;padding:8px 14px;font-size:13px;line-height:1.35;
+  border-radius:8px;
+}
