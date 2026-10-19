@@ -168,3 +168,49 @@ header .care-header-tools{flex:0 0 auto}
     aspect-ratio:615 / 1536;
   }
 }
+
+/* Patient phone only: remove the joint-status card and place status on the same row as its label. */
+@media(max-width:600px){
+  #carePatientMain #formCard .section>label:has(+ #selectedBox){
+    grid-column:1;
+    min-width:0;
+    align-self:center;
+    margin:0;
+  }
+  #carePatientMain #formCard #selectedBox{
+    grid-column:2;
+    justify-self:end;
+    align-self:center;
+    box-sizing:border-box;
+    min-width:0;
+    max-width:min(56vw,250px);
+    width:auto;
+    min-height:0;
+    margin:0;
+    padding:0!important;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    color:var(--blue);
+    font-size:14px;
+    font-weight:700;
+    line-height:1.4;
+    text-align:right;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+  #carePatientMain #formCard #selectedBox:has(> #selectedMeta:empty){
+    font-size:0!important;
+    color:var(--muted);
+    font-weight:500;
+  }
+  #carePatientMain #formCard #selectedBox:has(> #selectedMeta:empty)::before{
+    content:"Select from map";
+    font-size:13px;
+    font-weight:500;
+  }
+  html[lang="hi"] #carePatientMain #formCard #selectedBox:has(> #selectedMeta:empty)::before{
+    content:"नक्शे से चुनें";
+  }
+}
