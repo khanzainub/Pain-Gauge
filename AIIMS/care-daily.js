@@ -10,7 +10,7 @@ function days(p=saved()){
  for(const e of [...entries()].sort((a,b)=>String(a.updatedAt||a.createdAt||'').localeCompare(String(b.updatedAt||b.createdAt||''))))if(e.date)result[e.date]=pick(e);
  return {...result,...p.dailyConditions};
 }
-function forDate(date){const p=saved(),all=days(p),prior=Object.keys(all).filter(d=>d<=date).sort().pop();return prior?pick(all[prior]):Object.keys(all).length?pick({}):pick(p);}
+function forDate(date){const p=saved(),all=days(p),dates=Object.keys(all).sort(),prior=dates.filter(d=>d<=date).pop(),routine=prior?pick(all[prior]):dates.length?pick({}):pick(p);if(!dates.length||date>=dates.at(-1))for(const key of keys)if(p[key]!==undefined)routine[key]=p[key];return routine;}
 function load(date){setProfile({...saved(),...forDate(date)});window.updatePainGaugeMood?.();}
 function commit(profile,date){
  if(!date||date>today())return {...profile,dailyConditions:days()};
@@ -39,6 +39,6 @@ function injections(profile,rows=[]){
  }
  const merged=new Map(legacy.map(i=>[i.id,i]));for(const i of saved)merged.set(i.id,i);return [...merged.values()].filter(i=>!i.deleted);
 }
-window.PainGaugeDaily={forDate,load,commit,ensureToday,injections};
+window.PainGaugeDaily={forDate,load,commit,ensureToday,injections,savedProfile:saved,routine:pick};
 $('entryDate').addEventListener('change',()=>{if($('entryDate').value&&$('entryDate').value<=today())load($('entryDate').value);});
 })();

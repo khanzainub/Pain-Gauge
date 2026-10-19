@@ -18,6 +18,13 @@ function contentOf(b){return JSON.stringify(normalized({profile:b.profile||{},en
 function mergeBackups(local,remote,base=null){
  validBackup(local);validBackup(remote);const profile={},lp=local.profile,rp=remote.profile,bp=base?.profile||{};
  for(const key of new Set([...Object.keys(lp),...Object.keys(rp),...Object.keys(bp)])){const l=lp[key],r=rp[key];if(l===undefined)profile[key]=r;else if(r===undefined)profile[key]=l;else if(same(l,r))profile[key]=l;else if(base&&same(l,bp[key]))profile[key]=r;else if(base&&same(r,bp[key]))profile[key]=l;else if(String(local.profileUpdatedAt||'')>String(remote.profileUpdatedAt||''))profile[key]=l;else if(l===undefined||l===''||l===null||Array.isArray(l)&&!l.length)profile[key]=r;else if(r===undefined||r===''||r===null||Array.isArray(r)&&!r.length)profile[key]=l;else profile[key]=r;}
+ // Reconcile daily fields independently so two devices cannot replace a whole day's details.
+ if(lp.dailyConditions||rp.dailyConditions){
+  const dailyOf=(p,baseline)=>{const d=Object.fromEntries(Object.entries(p.dailyConditions||{}).map(([date,values])=>[date,{...values}])),date=Object.keys(d).sort().pop();if(date)for(const key of Object.keys(d[date]))if(p[key]!==undefined&&!same(p[key],d[date][key])&&(!baseline||!same(p[key],baseline[key])))d[date][key]=p[key];return d;};
+  const result={},ld=dailyOf(lp,base?bp:null),rd=dailyOf(rp,base?bp:null),bd=dailyOf(bp,null);
+  for(const date of new Set([...Object.keys(ld),...Object.keys(rd)])){const l=ld[date]||{},r=rd[date]||{},b=bd[date]||{};result[date]={};for(const key of new Set([...Object.keys(l),...Object.keys(r)])){const lv=l[key],rv=r[key];result[date][key]=lv===undefined?rv:rv===undefined?lv:same(lv,rv)?lv:base&&same(lv,b[key])?rv:base&&same(rv,b[key])?lv:String(local.profileUpdatedAt||'')>String(remote.profileUpdatedAt||'')?lv:rv;}}
+  profile.dailyConditions=result;const latest=Object.keys(result).sort().pop();if(latest)Object.assign(profile,result[latest]);
+ }
  // Merge injection events by ID, retaining deletion tombstones across devices.
  if(Array.isArray(lp.injections)||Array.isArray(rp.injections)){const events=new Map();for(const i of [...(rp.injections||[]),...(lp.injections||[])]){if(!i||!i.id)continue;const old=events.get(i.id);if(!old||String(i.updatedAt||i.createdAt||'')>=String(old.updatedAt||old.createdAt||''))events.set(i.id,i);}profile.injections=[...events.values()];}
  const lm=new Map(local.entries.map(e=>[e.id,e])),rm=new Map(remote.entries.map(e=>[e.id,e])),bm=new Map((base?.entries||[]).map(e=>[e.id,e])),entries=[];
