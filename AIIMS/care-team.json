@@ -2,6 +2,7 @@
   "name": "Your care team",
   "version": 1,
   "doctors": [
-    { "email": "khanzainub@gmail.com", "name": "Zainab Khan" }
+    { "email": "khanzainub@gmail.com", "name": "Zainab Khan" },
+    { "email": "drmamtaigmc16@gmail.com", "name": "Dr Mamta" }
   ]
 }
