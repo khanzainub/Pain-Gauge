@@ -5,12 +5,15 @@ const ns='http://www.w3.org/2000/svg';
 function axis(container,chart){
  if(!container||!chart)return;
  const labels=[...chart.querySelectorAll('text')].filter(n=>/^(0|2|4|6|8|10)$/.test(n.textContent.trim())&&n.getAttribute('text-anchor')==='end'&&Number(n.getAttribute('x'))<=56&&n.hasAttribute('y'));
- let overlay=container.querySelector('.care-fixed-axis');
- if(!labels.length){overlay?.remove();container.classList.remove('care-axis-scroll');return;}
+ let pane=container.querySelector('.care-fixed-axis'),scroller=container.querySelector('.care-plot-scroll');
+ if(!labels.length){pane?.remove();if(scroller){container.insertBefore(chart,scroller);scroller.remove();}container.classList.remove('care-axis-scroll');return;}
+ if(!scroller){scroller=document.createElement('div');scroller.className='care-plot-scroll';container.insertBefore(scroller,chart);scroller.appendChild(chart);}
+ labels.forEach(n=>n.classList.add('care-scroll-axis-label'));
  const box=chart.viewBox.baseVal,signature=box.width+','+box.height+':'+labels.map(n=>n.outerHTML).join('');
- if(overlay?.dataset.signature===signature)return;
- overlay?.remove();overlay=document.createElementNS(ns,'svg');overlay.classList.add('care-fixed-axis');overlay.dataset.signature=signature;overlay.setAttribute('aria-hidden','true');overlay.setAttribute('viewBox','0 0 56 '+box.height);overlay.setAttribute('width','56');overlay.setAttribute('height',String(box.height));overlay.style.height=chart.style.height||box.height+'px';
- const ys=labels.map(n=>Number(n.getAttribute('y'))),rect=document.createElementNS(ns,'rect');rect.setAttribute('x','0');rect.setAttribute('y',String(Math.min(...ys)-18));rect.setAttribute('width','56');rect.setAttribute('height',String(Math.max(...ys)-Math.min(...ys)+27));rect.setAttribute('fill','#fff');overlay.appendChild(rect);labels.forEach(n=>overlay.appendChild(n.cloneNode(true)));container.classList.add('care-axis-scroll');container.appendChild(overlay);
+ container.classList.add('care-axis-scroll');
+ if(pane?.dataset.signature===signature)return;
+ pane?.remove();pane=document.createElementNS(ns,'svg');pane.classList.add('care-fixed-axis');pane.dataset.signature=signature;pane.setAttribute('aria-hidden','true');pane.setAttribute('viewBox','0 0 40 '+box.height);pane.setAttribute('width','40');pane.setAttribute('height',String(box.height));pane.style.height=chart.style.height||box.height+'px';
+ const rect=document.createElementNS(ns,'rect');rect.setAttribute('width','40');rect.setAttribute('height',String(box.height));rect.setAttribute('fill','#fff');pane.appendChild(rect);labels.forEach(n=>{const label=n.cloneNode(true);label.classList.remove('care-scroll-axis-label');label.setAttribute('x','28');pane.appendChild(label);});container.insertBefore(pane,scroller);
 }
 let queued=false;
 function refresh(){queued=false;axis(document.querySelector('.chart-box'),document.getElementById('chart'));axis(document.getElementById('careDailyTrend'),document.querySelector('#careDailyTrend .care-chart-svg'));const identity=window.PainGaugeCare?.identity();document.body.dataset.careRole=identity&&window.PainGaugeCareCore.isAdmin({email:identity.email,email_verified:true})?'doctor':'patient';}
