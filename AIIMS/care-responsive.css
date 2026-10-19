@@ -105,3 +105,20 @@ header .care-header-tools{flex:0 0 auto}
   #carePatientMain .chart-controls>div:first-child{grid-column:1/-1}
 }
 @media(max-width:359px){#carePatientMain .chart-controls{grid-template-columns:minmax(0,1fr)}}
+
+/* Patient phone only: single-joint label and compact side-by-side chart dates. */
+.care-mobile-joint-title-en,.care-mobile-joint-title-hi{display:none}
+@media(max-width:600px){
+ #carePatientMain #formCard .care-desktop-joint-title{display:none}
+ html:not([lang="hi"]) #carePatientMain #formCard .care-mobile-joint-title-en{display:inline}
+ html[lang="hi"] #carePatientMain #formCard .care-mobile-joint-title-hi{display:inline}
+ #carePatientMain #formCard #selectedBox{padding:6px 8px;min-height:36px;line-height:1.4}
+ #carePatientMain #formCard #selectedMeta{display:none}
+ #carePatientMain #formCard #selectedBox:has(> #selectedMeta:empty){font-size:0!important}
+ #carePatientMain #formCard #selectedBox:has(> #selectedMeta:empty)::before{content:"Select a joint from the body map";font-size:14px}
+ html[lang="hi"] #carePatientMain #formCard #selectedBox:has(> #selectedMeta:empty)::before{content:"शरीर के नक्शे से जोड़ चुनें"}
+ #carePatientMain #chartSection .chart-controls{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
+ #carePatientMain #chartSection .chart-controls>.chart-date-filter{min-width:0;grid-column:auto!important}
+ #carePatientMain #chartSection .chart-date-filter input[type="date"]{box-sizing:border-box;width:100%!important;min-width:0!important;max-width:none!important;padding:6px!important;font-size:12px!important}
+ #carePatientMain #chartSection .chart-date-filter input[type="date"]::-webkit-calendar-picker-indicator{width:15px;min-width:15px;margin:0;padding:0}
+}
