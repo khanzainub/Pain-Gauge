@@ -166,3 +166,21 @@ body:not([data-care-role="doctor"]) .care-doctor-contact{display:none}
 #carePatientMain #history{width:calc(100% - 24px);margin-inline:auto;border:1px solid #d7e3ee;border-radius:10px;background:#f7fbff;padding:8px;box-sizing:border-box;overscroll-behavior-y:auto;scrollbar-gutter:stable}
 @media(min-width:851px){#carePatientMain #painMapSection .body-svg{height:500px;max-height:500px;aspect-ratio:615/1536;width:100%}#carePatientMain #painMapSection .body-grid{align-items:start}}
 @media(min-width:851px){#carePatientMain #painMapSection .figure-note{min-height:34px}}
+
+/* BEGIN PATIENT DESKTOP LAYOUT */
+@media(min-width:901px){
+ body #carePatientMain #dailySection.care-routine-sections{display:block;column-count:2;column-gap:14px;margin:0 0 4px}
+ body #carePatientMain #dailySection>.care-input-card,body #carePatientMain #dailySection>.care-input-card[open]{display:block;break-inside:avoid;grid-column:auto;width:100%;box-sizing:border-box;margin:0 0 14px!important;min-width:0}
+ body #carePatientMain #dailySection>#profileSection[open]{break-after:column}
+ body #carePatientMain #dailySection .care-mood-choices{grid-template-columns:repeat(3,minmax(0,1fr))}
+ body #carePatientMain .layout{grid-template-columns:minmax(0,1fr) minmax(270px,300px);gap:16px;align-items:start}
+ body #carePatientMain .pain-entry{position:sticky;top:115px}
+ body #carePatientMain #painMapSection .body-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:start}
+ body #carePatientMain #painMapSection .figure-note{min-height:52px}
+ body #carePatientMain #painMapSection .body-svg{height:420px;max-height:420px;width:100%;aspect-ratio:615/1536}
+ body #carePatientMain .care-desktop-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start;margin-top:18px;margin-bottom:18px}
+ body #carePatientMain .care-desktop-tools>section{margin:0!important;min-width:0}
+ body #carePatientMain .care-desktop-tools .export-groups{grid-template-columns:1fr;gap:10px}
+ body #carePatientMain .care-desktop-tools .export-groups>div+div{border-left:0;border-top:1px solid #e0e7ee;padding:10px 0 0}
+}
+/* END PATIENT DESKTOP LAYOUT */
