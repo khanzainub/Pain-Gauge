@@ -18,3 +18,10 @@ test('overlapping joint injections dodge sideways while retaining their own line
 test('injection-only dates are retained on the chart axis without adding a pain point',()=>{const C=require('../care-charts.js');const html=C.trend([],'',[],[{date:'2026-10-10',anatomicalId:'s',anatomicalLocation:'Shoulder'}]);assert.match(html,/2026-10-10/);assert.match(html,/data-injection-day=/);assert.ok(!html.includes('data-day='));assert.ok(!html.includes('<circle'));});
 
 test('injection between reports follows that joint drawn line and stays clear at maximum pain',()=>{const C=require('../care-charts.js'),rows=[{date:'2026-10-10',anatomicalId:'k',anatomicalLocation:'Knee',painScore:10},{date:'2026-10-12',anatomicalId:'k',anatomicalLocation:'Knee',painScore:0}],events=[{date:'2026-10-10',anatomicalId:'k',anatomicalLocation:'Knee'},{date:'2026-10-11',anatomicalId:'k',anatomicalLocation:'Knee'}];const html=C.trend(rows,'',C.locations(rows),events),markers=[...html.matchAll(/data-anchor-y="([\d.]+)" transform="translate\([\d.]+ ([\d.]+)\)"/g)];assert.equal(Number(markers[0][1]),48);assert.ok(Number(markers[0][2])>=14);assert.equal(Number(markers[1][1]),146.5);});
+
+test('daily popup details are shared once and exclude fixed profile information',()=>{
+ const html=Charts.dailyInformation([{date:'2026-10-18',updatedAt:'1',mood:'Low',foodHabit:'Vegetarian',diagnosis:'Fibromyalgia',patientAge:37,gender:'Female'},{date:'2026-10-18',updatedAt:'2',mood:'Good',sleepHours:0,dietNotes:'Rice',medicationsTaken:'Morning dose',periodStatus:'On period',wellbeingNotes:'Daily note'}]);
+ for(const value of ['Good','0 h','Rice','Morning dose','On period','Daily note'])assert.ok(html.includes(value));
+ for(const value of ['Vegetarian','Fibromyalgia','Female','Low','Age','Gender','Diagnosis','Food habit'])assert.ok(!html.includes(value));
+ assert.equal((html.match(/Daily information/g)||[]).length,1);
+});
