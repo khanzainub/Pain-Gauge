@@ -45,7 +45,7 @@ test('doctor chart follows the patient plot: all days, zero gaps, and maximum of
  assert.equal((html.match(/class="care-date-label"/g)||[]).length,3);
  assert.equal(JSON.stringify(sample),original,'chart must not change original entries');
 });
-test('doctor's selected joint and date filter retain zero gaps without affecting the patient trend',()=>{
+test('doctor selected joint and date filter retains zero gaps without affecting the patient trend',()=>{
  const sample=[
   {date:'2026-10-01',anatomicalId:'k',anatomicalLocation:'Knee',painScore:6},
   {date:'2026-10-04',anatomicalId:'k',anatomicalLocation:'Knee',painScore:2},
