@@ -25,3 +25,37 @@ test('daily popup details are shared once and exclude fixed profile information'
  for(const value of ['Vegetarian','Fibromyalgia','Female','Low','Age','Gender','Diagnosis','Food habit'])assert.ok(!html.includes(value));
  assert.equal((html.match(/Daily information/g)||[]).length,1);
 });
+
+// The doctor's read-only trend must follow the patient chart's zero-filled calendar.
+test('doctor chart follows the patient plot: all days, zero gaps, and maximum of same-day scores',()=>{
+ const sample=[
+  {date:'2026-10-01',anatomicalId:'k',anatomicalLocation:'Knee',painScore:9,updatedAt:'1'},
+  {date:'2026-10-01',anatomicalId:'k',anatomicalLocation:'Knee',painScore:3,updatedAt:'2'},
+  {date:'2026-10-03',anatomicalId:'w',anatomicalLocation:'Wrist',painScore:7},
+  {date:'2026-10-04',anatomicalId:'k',anatomicalLocation:'Knee',painScore:0}
+ ];
+ const original=JSON.stringify(sample),html=Charts.patientMatchedTrend(sample,null,'2026-10-01','2026-10-04');
+ assert.equal((html.match(/<polyline/g)||[]).length,2);
+ assert.match(html,/Knee · 2026-10-01 · 9\.0\/10/);
+ assert.match(html,/Wrist · 2026-10-03 · 7\.0\/10/);
+ assert.match(html,/Knee · 2026-10-04 · 0\.0\/10/);
+ assert.match(html,/Knee · 2026-10-02 · No report \(displayed at 0\)/);
+ assert.match(html,/Wrist · 2026-10-01 · No report \(displayed at 0\)/);
+ assert.equal((html.match(/No report \(displayed at 0\)/g)||[]).length,4);
+ assert.equal((html.match(/class="care-date-label"/g)||[]).length,3);
+ assert.equal(JSON.stringify(sample),original,'chart must not change original entries');
+});
+test('doctor's selected joint and date filter retain zero gaps without affecting the patient trend',()=>{
+ const sample=[
+  {date:'2026-10-01',anatomicalId:'k',anatomicalLocation:'Knee',painScore:6},
+  {date:'2026-10-04',anatomicalId:'k',anatomicalLocation:'Knee',painScore:2},
+  {date:'2026-10-02',anatomicalId:'w',anatomicalLocation:'Wrist',painScore:5}
+ ];
+ const html=Charts.patientMatchedTrend(sample,['k'],'2026-10-02','2026-10-04');
+ assert.equal((html.match(/<polyline/g)||[]).length,1);
+ assert.match(html,/Knee · 2026-10-02 · No report \(displayed at 0\)/);
+ assert.match(html,/Knee · 2026-10-03 · No report \(displayed at 0\)/);
+ assert.match(html,/Knee · 2026-10-04 · 2\.0\/10/);
+ assert.ok(!html.includes('data-location="w"'));
+ assert.equal((Charts.trend(sample).match(/No report \(displayed at 0\)/g)||[]).length,0);
+});
