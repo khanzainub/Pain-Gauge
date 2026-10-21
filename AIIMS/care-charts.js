@@ -6,16 +6,16 @@ function daily(rows){const by=new Map();for(const e of rows){const key=e.date+'|
 function filtered(rows,{from='',to='',location='',locations:selected=null}={}){return rows.filter(e=>(!from||e.date>=from)&&(!to||e.date<=to)&&(!location||e.anatomicalId===location)&&(selected===null||selected.includes(e.anatomicalId)));}
 function locations(rows){const m=new Map();rows.forEach(e=>m.set(e.anatomicalId,e.anatomicalLocation));return [...m].sort((a,b)=>a[1].localeCompare(b[1]));}
 const empty=message=>'<div class="care-chart-empty">'+escape(message||'No reports in this date range.')+'</div>';
-function line(series,label,injections=[]){
+function line(series,label,injections=[],options={}){
  injections=injections.filter(i=>!i.deleted);
  const dates=[...new Set([...series.flatMap(s=>s.values.map(v=>v.date)),...injections.map(i=>i.date)])].sort();if(!dates.length)return empty();
  const l=54,r=25,t=injections.length?48:20,b=105,h=350,start=Date.parse(dates[0]+'T00:00:00Z'),end=Date.parse(dates.at(-1)+'T00:00:00Z'),gaps=dates.slice(1).map((d,i)=>(Date.parse(d+'T00:00:00Z')-Date.parse(dates[i]+'T00:00:00Z'))/86400000),minGap=gaps.length?Math.min(...gaps):1,span=(end-start)/86400000;
- const w=Math.max(640,Math.ceil(span/Math.max(1,minGap)*48)+l+r),x=d=>l+(Date.parse(d+'T00:00:00Z')-start)/Math.max(86400000,end-start)*(w-l-r),y=v=>h-b-v/10*(h-t-b);
+ const w=Math.max(640,Math.min(options.maxWidth||Infinity,Math.ceil(span/Math.max(1,minGap)*48)+l+r)),x=d=>l+(Date.parse(d+'T00:00:00Z')-start)/Math.max(86400000,end-start)*(w-l-r),y=v=>h-b-v/10*(h-t-b);
  const overlay=injectionMarkers(injections,series,x,y,w,h);
  let svg='<svg viewBox="0 0 '+w+' '+overlay.height+'" width="'+w+'" height="'+overlay.height+'" style="width:'+w+'px;max-width:none" role="group" aria-label="'+escape(label)+'" class="care-chart-svg"><title>'+escape(label)+'</title><rect x="'+l+'" y="'+t+'" width="'+(w-l-r)+'" height="'+(h-t-b)+'" fill="#fff" stroke="#cbd5e1"/>';
  for(const v of [0,2,4,6,8,10])svg+='<path d="M'+l+' '+y(v)+'H'+(w-r)+'" stroke="#d1d5db" stroke-width="1"/><text x="'+(l-12)+'" y="'+(y(v)+4)+'" text-anchor="end">'+v+'</text>';
- for(const d of dates)svg+='<path d="M'+x(d)+' '+t+'V'+(h-b)+'" stroke="#e0e3e7" stroke-width="1"/><text class="care-date-label" transform="translate('+x(d)+' '+(h-b+12)+') rotate(-90)" text-anchor="end">'+escape(d)+'</text>';
- series.forEach((s,i)=>{const color=s.color||palette[i%palette.length];svg+='<polyline points="'+s.values.map(v=>x(v.date)+','+y(v.value)).join(' ')+'" stroke="'+color+'" fill="none" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"'+(s.dash?' stroke-dasharray="'+s.dash+'"':'')+'/>';s.values.forEach(v=>{const title=escape(s.name+' · '+v.date+' · '+Number(v.value).toFixed(1)+'/10');svg+='<g tabindex="0" role="button" data-day="'+escape(v.date)+'" data-location="'+escape(s.location||'')+'" aria-label="Open entry notes: '+title+'"><circle cx="'+x(v.date)+'" cy="'+y(v.value)+'" r="13" fill="transparent"/><circle cx="'+x(v.date)+'" cy="'+y(v.value)+'" r="4.5" fill="'+color+'" stroke="#fff" stroke-width="1.5"/><title>'+title+'</title></g>';});});return svg+overlay.html+'</svg>';
+ const axisDates=options.axisDates?new Set(options.axisDates):null;for(const d of dates)if(!axisDates||axisDates.has(d))svg+='<path d="M'+x(d)+' '+t+'V'+(h-b)+'" stroke="#e0e3e7" stroke-width="1"/><text class="care-date-label" transform="translate('+x(d)+' '+(h-b+12)+') rotate(-90)" text-anchor="end">'+escape(d)+'</text>';
+ series.forEach((s,i)=>{const color=s.color||palette[i%palette.length];svg+='<polyline points="'+s.values.map(v=>x(v.date)+','+y(v.value)).join(' ')+'" stroke="'+color+'" fill="none" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"'+(s.dash?' stroke-dasharray="'+s.dash+'"':'')+'/>';s.values.forEach(v=>{if(v.reported===false){svg+='<circle cx="'+x(v.date)+'" cy="'+y(v.value)+'" r="2.5" fill="#fff" stroke="'+color+'" stroke-width="1.5"><title>'+escape(s.name+' · '+v.date+' · No report (displayed at 0)')+'</title></circle>';return;}const title=escape(s.name+' · '+v.date+' · '+Number(v.value).toFixed(1)+'/10');svg+='<g tabindex="0" role="button" data-day="'+escape(v.date)+'" data-location="'+escape(s.location||'')+'" aria-label="Open entry notes: '+title+'"><circle cx="'+x(v.date)+'" cy="'+y(v.value)+'" r="13" fill="transparent"/><circle cx="'+x(v.date)+'" cy="'+y(v.value)+'" r="4.5" fill="'+color+'" stroke="#fff" stroke-width="1.5"/><title>'+title+'</title></g>';});});return svg+overlay.html+'</svg>';
 }
 function injectionMarkers(injections,series,x,y,width,height){
  const groups=new Map();for(const i of injections){const key=i.date+'|'+i.anatomicalId;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(i);}const placed=[],markers=[];let unscored=false;
@@ -32,6 +32,26 @@ function injectionMarkers(injections,series,x,y,width,height){
 }
 function seriesStyle(id,allLocations){const index=Math.max(0,allLocations.findIndex(([key])=>key===id));return {color:palette[index%palette.length],dash:['','7 3','2 3','8 3 2 3'][Math.floor(index/palette.length)%4]};}
 function trend(rows,location='',allLocations=locations(rows),injections=[]){const joints=locations(rows).filter(([id])=>!location||id===location);const series=joints.map(([id,name])=>{return {name,location:id,...seriesStyle(id,allLocations),values:daily(rows.filter(e=>e.anatomicalId===id)).map(d=>({date:d.date,value:d.max}))};});return line(series,'Pain trends for every reported joint and location. Tap a point for its saved notes.',injections);}
+// Doctor-only plotting: reproduce the patient chart's inclusive daily grid and per-day maximum.
+function patientMatchedTrend(rows,selected=null,from='',to='',injections=[]){
+ const all=locations(rows),joints=all.filter(([id])=>selected===null||selected.includes(id));
+ const observed=rows.map(e=>e.date).sort(),first=from||observed[0],last=to||observed.at(-1);
+ const label='Pain trends for every reported joint and location. Tap a point for its saved notes.';
+ if(!joints.length||!first||!last||first>last)return line([],label,injections);
+ const start=Date.parse(first+'T00:00:00Z'),end=Date.parse(last+'T00:00:00Z');
+ if(!Number.isFinite(start)||!Number.isFinite(end))return line([],label,injections);
+ const days=[];for(let t=start;t<=end&&days.length<=3700;t+=86400000)days.push(new Date(t).toISOString().slice(0,10));
+ const series=joints.map(([id,name])=>{
+  const byDate=new Map();
+  for(const e of rows)if(e.anatomicalId===id&&e.date>=first&&e.date<=last){
+   byDate.set(e.date,Math.max(byDate.get(e.date)??-Infinity,Number(e.painScore)));
+  }
+  return {name,location:id,...seriesStyle(id,all),values:days.map(date=>({date,value:byDate.get(date)??0,reported:byDate.has(date)}))};
+ });
+ // Keep the doctor's existing date-label density, while plotting every day between labels.
+ const axisDates=[first,last,...rows.filter(e=>e.date>=first&&e.date<=last).map(e=>e.date),...injections.map(i=>i.date)];
+ return line(series,label,injections,{axisDates,maxWidth:12000});
+}
 function pointEntries(rows,date,location=''){const day=daily(rows).find(d=>d.date===date);return [...(day?.entries||[])].filter(e=>!location||e.anatomicalId===location).sort((a,b)=>Number(b.painScore)-Number(a.painScore)||String(b.updatedAt||b.createdAt||'').localeCompare(String(a.updatedAt||a.createdAt||'')));}
 const heatPalette=['#f0f7fa','#e0f0f5','#cce5ee','#afd4e3','#86bdd3','#5ba2c0','#3686aa','#206b91','#145477','#0d405e','#082f49'];
 function heatStyle(score){const color=heatPalette[Math.max(0,Math.min(10,Math.round(Number(score))))];const rgb=color.slice(1).match(/../g).map(h=>parseInt(h,16)/255).map(c=>c<=.04045?c/12.92:((c+.055)/1.055)**2.4),lum=.2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2];return {color,text:lum>.179?'#000000':'#ffffff'};}
@@ -47,5 +67,5 @@ function dailyInformation(records){
 }
 
 
-const api={dailyInformation,daily,filtered,locations,line,seriesStyle,trend,pointEntries,overlappingPointEntries,heatmap,heatStyle};root.PainGaugeCareCharts=api;if(typeof module!=='undefined')module.exports=api;
+const api={dailyInformation,daily,filtered,locations,line,seriesStyle,trend,patientMatchedTrend,pointEntries,overlappingPointEntries,heatmap,heatStyle};root.PainGaugeCareCharts=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);
