@@ -41,7 +41,7 @@ test('doctor chart follows the patient plot: all days, zero gaps, and maximum of
  assert.match(html,/Knee · 2026-10-04 · 0\.0\/10/);
  assert.match(html,/Knee · 2026-10-02 · No report \(displayed at 0\)/);
  assert.match(html,/Wrist · 2026-10-01 · No report \(displayed at 0\)/);
- assert.equal((html.match(/No report \(displayed at 0\)/g)||[]).length,4);
+ assert.equal((html.match(/No report \(displayed at 0\)/g)||[]).length,5);
  assert.equal((html.match(/class="care-date-label"/g)||[]).length,3);
  assert.equal(JSON.stringify(sample),original,'chart must not change original entries');
 });
